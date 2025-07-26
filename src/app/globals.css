@@ -13,16 +13,34 @@
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
+}
+/* Target scrollbar track (background) */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 100px;
 }
 
+/* Scrollbar background */
+::-webkit-scrollbar-track {
+  background-color: hsl(0, 0%, 7%);
+}
+
+/* Scrollbar thumb (the draggable part) */
+::-webkit-scrollbar-thumb {
+  background-color: hsl(240, 2%, 12%);
+  border: 1px solid hsl(0, 0%, 22%);
+  border-radius: 20px;
+}
+
+/* 
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
+} */
 
 * {
   box-sizing: border-box;
@@ -33,6 +51,9 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+.common-padding {
+  padding: 50px 90px;
 }
 
 @media (prefers-color-scheme: dark) {
