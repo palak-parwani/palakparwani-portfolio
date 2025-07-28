@@ -4,11 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-  "build": "next build && next export",
-  "start": "next start",
-  "lint": "next lint",
-  "predeploy": "npm run build",
-  "deploy": "gh-pages -d out"
+     "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "bootstrap": "^5.3.7",
