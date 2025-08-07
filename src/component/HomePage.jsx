@@ -8,10 +8,10 @@ export default function HomePage() {
     <>
       <div className="common-padding">
         <Row>
-          <Col md={3}>
+          <Col xxl={3} lg={12} md={12} sm={12}>
             <LeftSide />
           </Col>
-          <Col md={9}>
+          <Col xxl={9} lg={12} md={12} sm={12}>
             <RightSide />
           </Col>
         </Row>

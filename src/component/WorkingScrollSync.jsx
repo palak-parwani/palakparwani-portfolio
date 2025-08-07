@@ -455,7 +455,7 @@ const WorkingScrollSync = () => {
       >
         <div className="p-4" style={{ maxWidth: "100%" }}>
           <div className="mb-4">
-            <h3 className="fw-bold mb-3 text-white">
+            <h3 className={`fw-bold mb-3 text-white ${styles.projectTitle}`}>
               {contentList[activeSection]?.title}
             </h3>
             <p

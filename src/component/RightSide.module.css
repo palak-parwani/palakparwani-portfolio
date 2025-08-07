@@ -413,3 +413,15 @@
   justify-content: center;
   align-items: center;
 }
+
+@media (max-width: 1280px){
+  .container{
+    margin-top: 20px;
+  }
+  .projectTitle{
+    font-size: 18px;
+  }
+  .pageTitle{
+    font-size: 30px;
+  }
+}
