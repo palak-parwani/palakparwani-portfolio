@@ -59,8 +59,8 @@
   transition: all 0.3s ease;
 }
 
-.tabButton.active {
-  color: hsl(45, 100%, 72%);
+.active {
+  color: hsl(45, 100%, 72%) !important;
   font-weight: 500;
 }
 .tabButton:hover {
@@ -266,7 +266,7 @@
 .educationSection {
   background-color: #1e1e1e;
   padding: 40px 20px;
-      padding-top: 20px;
+  padding-top: 20px;
   color: #fff;
   font-family: "Segoe UI", sans-serif;
 }
@@ -414,14 +414,124 @@
   align-items: center;
 }
 
-@media (max-width: 1280px){
-  .container{
+@media (max-width: 1280px) {
+  .container {
     margin-top: 20px;
   }
-  .projectTitle{
+  .projectTitle {
     font-size: 18px;
   }
-  .pageTitle{
+  .pageTitle {
     font-size: 30px;
+  }
+  .tabs {
+    margin-top: -18px;
+  }
+}
+@media (max-width: 800px) {
+  .serviceHead {
+    font-size: 15px;
+  }
+  .ServiceDes {
+    font-size: 12px;
+  }
+  .tech {
+    font-size: 12px;
+    padding: 5px 10px;
+    gap: 5px !important;
+  }
+  .keyfeaturepoints {
+    font-size: 12px;
+  }
+  .projectdesc {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 576px) {
+  .tabs {
+    margin-top: 0px;
+    position: fixed;
+    bottom: 0px;
+    z-index: 999;
+    left: 0px;
+    box-shadow: 0 16px 30px hsla(0, 0%, 0%, 0.25);
+    border-radius: 12px 12px 0 0;
+    background: hsla(240, 1%, 17%, 0.75);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    gap: 20px;
+    text-align: center;
+    justify-content: center;
+  }
+  .cardsWrapper {
+    grid-template-columns: 1fr;
+  }
+  .serviceItem {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 12px 12px;
+  }
+  .serviceHead {
+    font-size: 18px;
+  }
+  .headerRow {
+    padding: 0px 0px 0px 16px;
+    margin-bottom: 0px;
+  }
+  .contentBox {
+    padding: 1rem;
+  }
+  .pageTitle {
+    font-size: 26px;
+    margin-bottom: 2px;
+    margin-top: 18px;
+  }
+  .pageTitle::after {
+    height: 3px;
+  }
+  .description {
+    font-size: 14px;
+  }
+  .subHeading {
+    font-size: 17px;
+  }
+  .container {
+    margin-bottom: 60px;
+  }
+  .image {
+    margin: 5px;
+    height: 140px;
+    width: 150px;
+  }
+  .cardsWrapper {
+    gap: 13px;
+  }
+  .heading{
+    font-size: 20px;
+  }
+  .institution{
+    font-size: 16px;
+  }
+  .degree{
+    font-size: 14px;
+  }
+  .customList{
+    font-size: 13px;
+  }
+  .entry{
+    padding-left: 9px;
+  }
+  .button{
+    padding: 12px;
+    font-size: 16px;
+  }
+  .projectContainer{
+    flex-direction: column;
+  }
+  .projectContainer{
+    height: 100% !important;
+    overflow: scroll !important;
   }
 }

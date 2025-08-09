@@ -21,6 +21,10 @@ import {
 } from "react-icons/fa6";
 import { MdArrowOutward } from "react-icons/md";
 
+
+// Inside component
+const isDesktop = window.innerWidth >= 576;
+
 const WorkingScrollSync = () => {
   const [activeSection, setActiveSection] = useState(0);
   const sectionRefs = useRef([]);
@@ -290,6 +294,7 @@ const WorkingScrollSync = () => {
   ];
 
   useEffect(() => {
+      if (!isDesktop) return; // disable effect on mobile
     const scrollContainer = scrollContainerRef.current;
 
     // Method 1: Intersection Observer with better settings
@@ -350,7 +355,7 @@ const WorkingScrollSync = () => {
         scrollContainer.removeEventListener("scroll", handleScroll);
       }
     };
-  }, [activeSection, sections.length]);
+  }, [activeSection, sections.length, isDesktop]);
 
   return (
     <div
@@ -419,39 +424,31 @@ const WorkingScrollSync = () => {
           position: "sticky",
           top: 0,
         }}
-        onWheel={(e) => {
-          // Prevent default scroll behavior on right side
-          e.preventDefault();
+       onWheel={(e) => {
+  if (!isDesktop) return; // no scroll hijacking on mobile
 
-          // Pass scroll to left side container
-          if (scrollContainerRef.current) {
-            const scrollContainer = scrollContainerRef.current;
-            const currentScroll = scrollContainer.scrollTop;
-            const viewportHeight = scrollContainer.clientHeight;
+  e.preventDefault();
+  if (scrollContainerRef.current) {
+    const scrollContainer = scrollContainerRef.current;
+    const viewportHeight = scrollContainer.clientHeight;
+    const scrollDelta = e.deltaY;
 
-            // Determine scroll direction and amount
-            const scrollDelta = e.deltaY;
+    if (scrollDelta > 0) { 
+      const nextSection = Math.min(activeSection + 1, sections.length - 1);
+      scrollContainer.scrollTo({
+        top: nextSection * viewportHeight,
+        behavior: "smooth",
+      });
+    } else {
+      const prevSection = Math.max(activeSection - 1, 0);
+      scrollContainer.scrollTo({
+        top: prevSection * viewportHeight,
+        behavior: "smooth",
+      });
+    }
+  }
+}}
 
-            if (scrollDelta > 0) {
-              // Scrolling down - go to next section
-              const nextSection = Math.min(
-                activeSection + 1,
-                sections.length - 1
-              );
-              scrollContainer.scrollTo({
-                top: nextSection * viewportHeight,
-                behavior: "smooth",
-              });
-            } else {
-              // Scrolling up - go to previous section
-              const prevSection = Math.max(activeSection - 1, 0);
-              scrollContainer.scrollTo({
-                top: prevSection * viewportHeight,
-                behavior: "smooth",
-              });
-            }
-          }
-        }}
       >
         <div className="p-4" style={{ maxWidth: "100%" }}>
           <div className="mb-4">

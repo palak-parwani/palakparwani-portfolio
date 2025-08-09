@@ -1,22 +1,25 @@
 "use client";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import { FaLinkedin, FaSquarePhone, FaSquareXTwitter, FaLocationDot } from "react-icons/fa6";
+import { FaLinkedin, FaSquareXTwitter, FaLocationDot } from "react-icons/fa6";
 import { SiGithub } from "react-icons/si";
 import { IoPhonePortraitOutline } from "react-icons/io5";
 import { MdEmail, MdSimCardDownload } from "react-icons/md";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa"; // ⬅ arrow icons
 import styles from "./LeftSide.module.css";
 
 export default function LeftSide() {
   const [showMore, setShowMore] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isSmallMobile, setIsSmallMobile] = useState(false); // ⬅ new state
 
   useEffect(() => {
     const checkWidth = () => {
       setIsMobile(window.innerWidth < 1280);
+      setIsSmallMobile(window.innerWidth < 576); // ⬅ check for 576px
     };
 
-    checkWidth(); // Initial check
+    checkWidth();
     window.addEventListener("resize", checkWidth);
     return () => window.removeEventListener("resize", checkWidth);
   }, []);
@@ -31,10 +34,7 @@ export default function LeftSide() {
           </div>
           <div className={styles.contactInfo}>
             <p className={styles.contactTitle}>Email</p>
-            <a
-              href="mailto:parwanipalak3@gmail.com"
-              className={styles.contactLink}
-            >
+            <a href="mailto:parwanipalak3@gmail.com" className={styles.contactLink}>
               parwanipalak3@gmail.com
             </a>
           </div>
@@ -147,7 +147,11 @@ export default function LeftSide() {
               className={styles.button}
               onClick={() => setShowMore(!showMore)}
             >
-              {showMore ? "Hide Contacts" : "Show Contacts"}
+              {isSmallMobile ? (
+                showMore ? <FaChevronUp /> : <FaChevronDown />
+              ) : (
+                showMore ? "Hide Contacts" : "Show Contacts"
+              )}
             </button>
             {showMore && renderSidebarInfoMore()}
           </>
