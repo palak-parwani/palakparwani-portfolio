@@ -21,10 +21,6 @@ import {
 } from "react-icons/fa6";
 import { MdArrowOutward } from "react-icons/md";
 
-
-// Inside component
-const isDesktop = window.innerWidth >= 576;
-
 const WorkingScrollSync = () => {
   const [activeSection, setActiveSection] = useState(0);
   const sectionRefs = useRef([]);
@@ -292,218 +288,321 @@ const WorkingScrollSync = () => {
       link: "https://nextmigration.blueberry-travel.com/",
     },
   ];
+useEffect(() => {
+  const scrollContainer = scrollContainerRef.current;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const index = parseInt(entry.target.getAttribute("data-index"));
+          if (!isNaN(index)) {
+            setActiveSection(index);
+          }
+        }
+      });
+    },
+    {
+      root: scrollContainer,
+      threshold: 0.3, // smaller threshold to detect earlier
+    }
+  );
+
+  const handleScroll = () => {
+    if (!scrollContainer) return;
+    const scrollTop = scrollContainer.scrollTop;
+    const viewportHeight = scrollContainer.clientHeight;
+    const currentIndex = Math.round(scrollTop / viewportHeight);
+    const clampedIndex = Math.max(0, Math.min(currentIndex, sections.length - 1));
+    setActiveSection(clampedIndex);
+  };
+
+  if (scrollContainer) {
+    sectionRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+  }
+
+  return () => {
+    observer.disconnect();
+    if (scrollContainer) {
+      scrollContainer.removeEventListener("scroll", handleScroll);
+    }
+  };
+}, [sections.length]); // removed activeSection from deps
+
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  const [isMediumScreen, setIsMediumScreen] = useState(false);
 
   useEffect(() => {
-      if (!isDesktop) return; // disable effect on mobile
-    const scrollContainer = scrollContainerRef.current;
-
-    // Method 1: Intersection Observer with better settings
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = parseInt(entry.target.getAttribute("data-index"));
-            if (!isNaN(index)) {
-              console.log("Active section changed to:", index); // Debug log
-              setActiveSection(index);
-            }
-          }
-        });
-      },
-      {
-        root: scrollContainer,
-        threshold: 0.5,
-        rootMargin: "-20% 0px -20% 0px",
-      }
-    );
-
-    // Method 2: Backup scroll listener (in case intersection observer fails)
-    const handleScroll = () => {
-      if (!scrollContainer) return;
-
-      const scrollTop = scrollContainer.scrollTop;
-      const viewportHeight = scrollContainer.clientHeight;
-      const currentIndex = Math.round(scrollTop / viewportHeight);
-      const clampedIndex = Math.max(
-        0,
-        Math.min(currentIndex, sections.length - 1)
-      );
-
-      if (clampedIndex !== activeSection) {
-        console.log("Scroll method - Active section:", clampedIndex); // Debug log
-        setActiveSection(clampedIndex);
-      }
+    const handleResize = () => {
+      const width = window.innerWidth;
+      setIsSmallScreen(width <= 576);
+      setIsMediumScreen(width <= 1600 && width > 576);
     };
 
-    // Apply both methods
-    if (scrollContainer) {
-      // Observe all sections
-      sectionRefs.current.forEach((ref) => {
-        if (ref) observer.observe(ref);
-      });
-
-      // Add scroll listener as backup
-      scrollContainer.addEventListener("scroll", handleScroll);
-
-      // Set initial section
-      handleScroll();
-    }
-
-    return () => {
-      observer.disconnect();
-      if (scrollContainer) {
-        scrollContainer.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [activeSection, sections.length, isDesktop]);
+    handleResize(); // run on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <div
-      className={`container-fluid p-0 ${styles.projectContainer}`}
-      style={{ height: "100vh", display: "flex", overflow: "hidden" }}
-    >
-      {/* Left Image Scroll Section */}
-      <div
-        ref={scrollContainerRef}
-        className="col-7 p-0"
-        style={{
-          height: "100vh",
-          overflowY: "scroll",
-          scrollSnapType: "y mandatory",
-          scrollbarWidth: "none",
-          msOverflowStyle: "none",
-        }}
-      >
-        <style jsx>{`
-          .col-7::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
+    <>
+      {isSmallScreen && (
+        <div className="d-flex flex-column gap-4">
+          {sections.map((sec, index) => (
+            <div key={index}>
+              {/* Image */}
+              <div className="d-flex align-items-center justify-content-center mb-3">
+                <a
+                  href={sec.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.imageWrapper}
+                >
+                  <div className={styles.imageContainer}>
+                    <img
+                      src={sec.image}
+                      alt={`Section ${index + 1}`}
+                      className="img-fluid rounded shadow-lg"
+                      style={{ maxHeight: "90%", objectFit: "contain" }}
+                    />
+                    <div className={styles.imageOverlay}>
+                      <span>
+                        View Live{" "}
+                        <MdArrowOutward
+                          size={18}
+                          style={{ marginTop: "-6px" }}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </div>
 
-        {sections.map((sec, index) => (
-          <div
-            key={sec.id}
-            data-index={index}
-            ref={(el) => (sectionRefs.current[index] = el)}
-            className="d-flex align-items-center justify-content-center"
-            style={{
-              height: "100vh",
-              scrollSnapAlign: "start",
-            }}
-          >
-            <a
-              href={sec.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.imageWrapper}
-            >
-              <div className={styles.imageContainer}>
-                <img
-                  src={sec.image}
-                  alt={`Section ${index + 1}`}
-                  className="img-fluid rounded shadow-lg"
-                  style={{ maxHeight: "90%", objectFit: "contain" }}
-                />
-                <div className={styles.imageOverlay}>
-                  <span>
-                    View Live{" "}
-                    <MdArrowOutward size={18} style={{ marginTop: "-6px" }} />
-                  </span>
+              {/* Content for this image */}
+              <div className="p-md-4" style={{ maxWidth: "100%" }}>
+                <div className="mb-4">
+                  <h3
+                    className={`fw-bold mb-3 text-white ${styles.projectTitle}`}
+                  >
+                    {contentList[index]?.title}
+                  </h3>
+                  <p
+                    className={`${styles.projectdesc} mb-4`}
+                    style={{ lineHeight: "1.6" }}
+                  >
+                    {contentList[index]?.description}
+                  </p>
+                </div>
+
+                <div className="mb-4">
+                  <h4 className={styles.Keyfeatures}>Key Features:</h4>
+                  <ul className="list-unstyled">
+                    {contentList[index]?.points.map((pt, idx) => (
+                      <li
+                        key={idx}
+                        className="d-flex align-items-start justify-content-start mb-2"
+                      >
+                        <span className={styles.stars}>
+                          <FaStar size={13} style={{ marginTop: "-11px" }} />
+                        </span>
+                        <span className={styles.keyfeaturepoints}>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mb-4">
+                  <h4 className={styles.Keyfeatures}>Technologies:</h4>
+                  <div className={`d-flex flex-wrap gap-2`}>
+                    {contentList[index]?.tech.map((tech, tIdx) => (
+                      <span
+                        className={styles.tech}
+                        key={tIdx}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          marginBottom: "4px",
+                        }}
+                      >
+                        {tech.icon}
+                        <span>{tech.name}</span>
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </a>
-          </div>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
 
-      {/* Right Sticky Content */}
-      <div
-        className="col-5 bg-dark text-white d-flex align-items-center justify-content-center"
-        style={{
-          height: "100vh",
-          position: "sticky",
-          top: 0,
-        }}
-       onWheel={(e) => {
-  if (!isDesktop) return; // no scroll hijacking on mobile
+      {isMediumScreen && (
+        <div
+          className={`container-fluid p-0 ${styles.projectContainer}`}
+          style={{ height: "100vh", display: "flex", overflow: "hidden" }}
+        >
+          {/* Left Image Scroll Section */}
+          <div
+            ref={scrollContainerRef}
+            className="col-7 p-0"
+            style={{
+              height: "100vh",
+              overflowY: "scroll",
+              scrollSnapType: "y mandatory",
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
+            <style jsx>{`
+              .col-7::-webkit-scrollbar {
+                display: none;
+              }
+            `}</style>
 
-  e.preventDefault();
-  if (scrollContainerRef.current) {
-    const scrollContainer = scrollContainerRef.current;
-    const viewportHeight = scrollContainer.clientHeight;
-    const scrollDelta = e.deltaY;
-
-    if (scrollDelta > 0) { 
-      const nextSection = Math.min(activeSection + 1, sections.length - 1);
-      scrollContainer.scrollTo({
-        top: nextSection * viewportHeight,
-        behavior: "smooth",
-      });
-    } else {
-      const prevSection = Math.max(activeSection - 1, 0);
-      scrollContainer.scrollTo({
-        top: prevSection * viewportHeight,
-        behavior: "smooth",
-      });
-    }
-  }
-}}
-
-      >
-        <div className="p-4" style={{ maxWidth: "100%" }}>
-          <div className="mb-4">
-            <h3 className={`fw-bold mb-3 text-white ${styles.projectTitle}`}>
-              {contentList[activeSection]?.title}
-            </h3>
-            <p
-              className={`${styles.projectdesc} mb-4`}
-              style={{ lineHeight: "1.6" }}
-            >
-              {contentList[activeSection]?.description}
-            </p>
-          </div>
-
-          <div className="mb-4">
-            <h4 className={styles.Keyfeatures}>Key Features:</h4>
-            <ul className="list-unstyled">
-              {contentList[activeSection]?.points.map((pt, idx) => (
-                <li
-                  key={idx}
-                  className="d-flex align-items-start justify-content-start mb-2"
+            {sections.map((sec, index) => (
+              <div
+                key={sec.id}
+                data-index={index}
+                ref={(el) => (sectionRefs.current[index] = el)}
+                className="d-flex align-items-center justify-content-center"
+                style={{
+                  height: "100vh",
+                  scrollSnapAlign: "start",
+                }}
+              >
+                <a
+                  href={sec.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.imageWrapper}
                 >
-                  <span className={styles.stars}>
-                    <FaStar size={13} style={{marginTop:"-11px"}} />
-                  </span>
-                  <span className={styles.keyfeaturepoints}>{pt}</span>
-                </li>
-              ))}
-            </ul>
+                  <div className={styles.imageContainer}>
+                    <img
+                      src={sec.image}
+                      alt={`Section ${index + 1}`}
+                      className="img-fluid rounded shadow-lg"
+                      style={{ maxHeight: "90%", objectFit: "contain" }}
+                    />
+                    <div className={styles.imageOverlay}>
+                      <span>
+                        View Live{" "}
+                        <MdArrowOutward
+                          size={18}
+                          style={{ marginTop: "-6px" }}
+                        />
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            ))}
           </div>
 
-          <div className="mb-4">
-            <h4 className={styles.Keyfeatures}>Technologies:</h4>
-            <div className={`d-flex flex-wrap gap-2 `}>
-              {contentList[activeSection]?.tech.map((tech, index) => (
-                <span
-                  className={styles.tech}
-                  key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "8px",
-                    marginBottom: "4px",
-                  }}
+          {/* Right Sticky Content */}
+          <div
+            className={`col-5 bg-dark text-white d-flex align-items-center justify-content-center ${styles.forMob}`}
+            style={{
+              height: "100vh",
+              position: "sticky",
+              top: 0,
+            }}
+            onWheel={(e) => {
+              // Prevent default scroll behavior on right side
+              e.preventDefault();
+
+              // Pass scroll to left side container
+              if (scrollContainerRef.current) {
+                const scrollContainer = scrollContainerRef.current;
+                const currentScroll = scrollContainer.scrollTop;
+                const viewportHeight = scrollContainer.clientHeight;
+
+                // Determine scroll direction and amount
+                const scrollDelta = e.deltaY;
+
+                if (scrollDelta > 0) {
+                  // Scrolling down - go to next section
+                  const nextSection = Math.min(
+                    activeSection + 1,
+                    sections.length - 1
+                  );
+                  scrollContainer.scrollTo({
+                    top: nextSection * viewportHeight,
+                    behavior: "smooth",
+                  });
+                } else {
+                  // Scrolling up - go to previous section
+                  const prevSection = Math.max(activeSection - 1, 0);
+                  scrollContainer.scrollTo({
+                    top: prevSection * viewportHeight,
+                    behavior: "smooth",
+                  });
+                }
+              }
+            }}
+          >
+            <div className="p-4" style={{ maxWidth: "100%" }}>
+              <div className="mb-4">
+                <h3
+                  className={`fw-bold mb-3 text-white ${styles.projectTitle}`}
                 >
-                  {tech.icon}
-                  <span>{tech.name}</span>
-                </span>
-              ))}
+                  {contentList[activeSection]?.title}
+                </h3>
+                <p
+                  className={`${styles.projectdesc} mb-4`}
+                  style={{ lineHeight: "1.6" }}
+                >
+                  {contentList[activeSection]?.description}
+                </p>
+              </div>
+
+              <div className="mb-4">
+                <h4 className={styles.Keyfeatures}>Key Features:</h4>
+                <ul className="list-unstyled">
+                  {contentList[activeSection]?.points.map((pt, idx) => (
+                    <li
+                      key={idx}
+                      className="d-flex align-items-start justify-content-start mb-2"
+                    >
+                      <span className={styles.stars}>
+                        <FaStar size={13} style={{ marginTop: "-11px" }} />
+                      </span>
+                      <span className={styles.keyfeaturepoints}>{pt}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mb-4">
+                <h4 className={styles.Keyfeatures}>Technologies:</h4>
+                <div className={`d-flex flex-wrap gap-2 `}>
+                  {contentList[activeSection]?.tech.map((tech, index) => (
+                    <span
+                      className={styles.tech}
+                      key={index}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        marginBottom: "4px",
+                      }}
+                    >
+                      {tech.icon}
+                      <span>{tech.name}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
-
 export default WorkingScrollSync;

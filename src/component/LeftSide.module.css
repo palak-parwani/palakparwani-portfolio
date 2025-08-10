@@ -288,4 +288,10 @@
   .separator{
     margin: 17px 0;
   }
+  .contactTitle{
+    font-size: 13px;
+  }
+  .contactInfo :is(.contactLink, time, address){
+    font-size: 14px;
+  }
 }

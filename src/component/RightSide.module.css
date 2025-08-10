@@ -527,11 +527,4 @@
     padding: 12px;
     font-size: 16px;
   }
-  .projectContainer{
-    flex-direction: column;
-  }
-  .projectContainer{
-    height: 100% !important;
-    overflow: scroll !important;
-  }
 }
