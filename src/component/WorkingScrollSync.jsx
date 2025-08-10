@@ -20,6 +20,7 @@ import {
   FaUsers,
 } from "react-icons/fa6";
 import { MdArrowOutward } from "react-icons/md";
+import Image from "next/image";
 
 const WorkingScrollSync = () => {
   const [activeSection, setActiveSection] = useState(0);
@@ -483,11 +484,13 @@ useEffect(() => {
                   className={styles.imageWrapper}
                 >
                   <div className={styles.imageContainer}>
-                    <img
+                    <Image
                       src={sec.image}
+                      unoptimized
+                      width={100} height={100} 
                       alt={`Section ${index + 1}`}
                       className="img-fluid rounded shadow-lg"
-                      style={{ maxHeight: "90%", objectFit: "contain" }}
+                      style={{ maxHeight: "90%", objectFit: "contain" }} 
                     />
                     <div className={styles.imageOverlay}>
                       <span>
