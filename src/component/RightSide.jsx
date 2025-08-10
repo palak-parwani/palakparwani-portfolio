@@ -409,7 +409,7 @@ export default function RightSide() {
           <>
             <div>
               <div style={{ borderRadius: "12px", overflow: "hidden" }}>
-                <div style={{ position: "relative", minHeight: "450px" }}>
+                <div style={{ position: "relative", minHeight: "450px" }} className={styles.mapContainer}>
                   {!mapLoaded && (
                     <div
                       style={{
@@ -423,6 +423,7 @@ export default function RightSide() {
                         alignItems: "center",
                         justifyContent: "center",
                       }}
+                      
                     >
                       <span>Loading Map...</span>
                     </div>
@@ -439,7 +440,7 @@ export default function RightSide() {
                 </div>
               </div>
 
-              <h2 className={styles.heading}>Contact Form</h2>
+              <h2 className={`${styles.heading} ${styles.contacthead}`}>Contact Form</h2>
               <form ref={form} onSubmit={sendEmail} className={styles.form}>
                 <div className={styles.row}>
                   <input
@@ -474,7 +475,7 @@ export default function RightSide() {
                 <div className="d-flex justify-content-end">
                   <button
                     type="submit"
-                    className={styles.button}
+                    className={`${styles.button}  ${styles.sendbtn}`}
                     disabled={loading}
                     style={{ minWidth: "200px", maxWidth: "200px" }}
                   >

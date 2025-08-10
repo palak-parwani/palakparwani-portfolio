@@ -265,10 +265,23 @@
   .button {
     font-size: 13px;
     padding: 10px 14px;
+    margin-top: 0px;
   }
   .sidebar {
     padding: 12px;
     padding-top: 16px;
+  }
+  .activeStatus{
+    height: 8px;
+    width: 8px;
+  }
+    @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 #39ff14;
+    }
+    100% {
+      box-shadow: 0 0 0 8px #69ffa800; 
+    }
   }
   .avatarBox {
     width: 80px;
