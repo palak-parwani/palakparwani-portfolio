@@ -490,7 +490,7 @@ useEffect(() => {
                       width={100} height={100} 
                       alt={`Section ${index + 1}`}
                       className="img-fluid rounded shadow-lg"
-                      style={{ maxHeight: "90%", objectFit: "contain" }} 
+                      style={{ maxHeight: "90%", objectFit: "cover", width:"100%", height:"100%" }} 
                     />
                     <div className={styles.imageOverlay}>
                       <span>
