@@ -10,11 +10,22 @@ import { IoBookOutline } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import WorkingScrollSync from "./WorkingScrollSync";
+import WorkingScrollSyncMobile from "./WorkingScrollSyncMobile";
 
 const tabs = ["About", "Resume", "Projects", "Contact"];
 
 export default function RightSide() {
-  const scrollRef = useRef(null);
+ const scrollRef = useRef(null);
+
+  // ✅ Add this for responsive component switching
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsSmallScreen(window.innerWidth < 600);
+    handleResize(); // Run on initial load
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   const settings = {
     infinite: true,
     speed: 2000,
@@ -401,7 +412,7 @@ export default function RightSide() {
       case "Projects":
         return (
           <>
-            <WorkingScrollSync />
+          {isSmallScreen ? <WorkingScrollSyncMobile /> : <WorkingScrollSync />}
           </>
         );
       case "Contact":
