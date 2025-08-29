@@ -119,7 +119,7 @@ export default function LeftSide() {
       <div className={styles.sidebar} data-sidebar="">
         <div className={styles.sidebarInfo}>
           <a
-            href="/me2.jpeg"
+            href="/palak.jpeg"
             target="_blank"
             rel="noopener noreferrer"
             title="Click me!"
