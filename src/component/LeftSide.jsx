@@ -102,7 +102,7 @@ export default function LeftSide() {
         </li>
         <li className={styles.socialItem}>
           <a
-            href="/PalakCV.pdf"
+            href="/palakparwaniResume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialLink}

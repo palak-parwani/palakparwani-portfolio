@@ -400,7 +400,7 @@ export default function RightSide() {
             </section>
 
             <div className="d-flex justify-content-end">
-              <a href="/PalakCV.pdf" download className="text-decoration-none">
+              <a href="/palakparwaniResume.pdf" download className="text-decoration-none">
                 <button type="button" className={styles.button}>
                   <IoDocumentTextOutline />
                   &nbsp;Download CV
