@@ -102,7 +102,7 @@ export default function LeftSide() {
         </li>
         <li className={styles.socialItem}>
           <a
-            href="/palakCV.pdf"
+            href="/PalakCV.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className={styles.socialLink}
@@ -119,7 +119,7 @@ export default function LeftSide() {
       <div className={styles.sidebar} data-sidebar="">
         <div className={styles.sidebarInfo}>
           <a
-            href="/palak.jpeg"
+            href="/palakparwani.jpeg"
             target="_blank"
             rel="noopener noreferrer"
             title="Click me!"
